@@ -14,6 +14,12 @@ const GET_MOVIES = gql`
 			medium_cover_image
 			description_full
 		}
+		suggestions(id: $id) {
+			id
+			title
+			rating
+			medium_cover_image
+		}
 	}
 `;
 
@@ -61,20 +67,17 @@ export default () => {
 	const { loading, data } = useQuery(GET_MOVIES, {
 		variables: { id },
 	});
+	console.log(data);
 	return (
 		<Container>
 			<Column>
 				<Title>{loading ? "Loading..." : data.movie.title}</Title>
-				{!loading && data.movie && (
-					<>
-						<Subtitle>
-							{data.movie.language} | {data.movie.rating}
-						</Subtitle>
-						<Description>{data.movie.description_full}</Description>
-					</>
-				)}
+				<Subtitle>
+					{data?.movie?.language}|{data?.movie?.rating}
+				</Subtitle>
+				<Description>{data?.movie?.description_full}</Description>
 			</Column>
-			<Poster bg={data && data.movie ? data.movie.medium_cover_image : ""}></Poster>
+			<Poster bg={data?.movie?.medium_cover_image}></Poster>
 		</Container>
 	);
 };
